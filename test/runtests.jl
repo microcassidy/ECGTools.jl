@@ -4,7 +4,8 @@ using Test
 @testset "ECGTools.jl" begin
     @testset "frame operator" begin
         X = rand(9,100)
+        ℱi = InverseFrameOperator()
         ℱ = FrameOperator()
-        @test ℱ \ (ℱ * X) ≈ X
+        @test ℱi * (ℱ * X) ≈ X
     end
 end
