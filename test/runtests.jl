@@ -2,5 +2,9 @@ using ECGTools
 using Test
 
 @testset "ECGTools.jl" begin
-    # Write your tests here.
+    @testset "frame operator" begin
+        X = rand(9,100)
+        ℱ = FrameOperator()
+        @test ℱ \ (ℱ * X) ≈ X
+    end
 end
