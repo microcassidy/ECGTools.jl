@@ -53,6 +53,6 @@ end
 
 
 export \,*
-\(op::FrameOperator,X::AbstractMatrix{Float64}) = op.F_l * X
+\(op::FrameOperator,X::AbstractMatrix{Float64}) = copy(op.F_l) * X
 *(op::FrameOperator,X::AbstractMatrix{Float64}) = op.F * X
 end
