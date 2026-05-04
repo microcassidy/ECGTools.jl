@@ -21,4 +21,33 @@ const Fi = Rational{Int64}(1//3) * LinearMap(Rational{Int64}[5 3 1 1 1 1 1 1 -1;
 
 
 get_transform(s::String) = findfirst(s .== TRANSFORM_LEAD_ORDERING) |> idx -> frame_operator_X[idx,:]* frame_operator_lambda
+
+
+const op_null_fill = [Matrix{Rational{Int64}}(I(9)[1:8,:]);-null_space'] |> LinearMap
+const op_Ψ_terminals = LinearMap(Ψ_terminals)
+const OP_FORWARD = F * op_null_fill * op_Ψ_terminals' #TERMINAL -> LEADS
+const OP_INVERSE = op_Ψ_terminals * Fi #LEADS -> TERMINALS
+const OP_ECG_SAMPLING = I(12)[ECG_LEAD_IDXS,:] |> Matrix{Rational{Int64}} |> LinearMap
+const OP_NO_NULL = LinearMap(Matrix{Rational{Int64}}([I(8) zeros(8)]))'
+
+
+
+
+export ecg_to_terminals
+function ecg_to_terminals(X::AbstractMatrix{T} ) where {T}
+    size(X,1) == 12 || error("expected 12 channels")
+    OP_INVERSE * OP_NO_NULL * OP_ECG_SAMPLING * LinearMap(X)
+    # OP_NO_NULL * OP_ECG_SAMPLING * LinearMap(X)
+    # OP_INVERSE *
+end
+
+
+export terminals_to_ecg
+terminals_to_ecg(X::LinearMap ) =  OP_NO_NULL' * OP_FORWARD * X
+# function terminals_to_ecg(X::ScaledMap{T} ) where {T}
+#     G = LinearMap(Matrix{Rational}(6 * ECGTools.frame_operator)) * (1 // 6)
+#     #Add the redunant terminal back in and then expand to 12-lead ecg
+#     G *  * LinearMap(Ψ_terminals)'* X
+# end
+
 end
