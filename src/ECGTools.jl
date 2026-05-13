@@ -9,11 +9,19 @@ const TRANSFORM_LEAD_ORDERING = String["I", "II", "III", "aVR", "aVL", "aVF", "V
 const frame_operator_X = Rational{Int64}[6 -6 0 0 0 0 0 0 0; 0 -6 6 0 0 0 0 0 0; -6 0 6 0 0 0 0 0 0; -3 6 -3 0 0 0 0 0 0; 6 -3 -3 0 0 0 0 0 0; 3 3 -6 0 0 0 0 0 0; 0 4 -4 6 0 0 0 0 0; 0 4 -4 0 6 0 0 0 0; 0 4 -4 0 0 6 0 0 0; 0 4 -4 0 0 0 6 0 0; 0 4 -4 0 0 0 0 6 0; 0 4 -4 0 0 0 0 0 6]
 const frame_operator_lambda = Rational{Int64}(1//6)
 const frame_operator = LinearMap(frame_operator_X) * frame_operator_lambda
-const ECG_LEAD_IDXS = Int64[[1,3];7:12]
+const ECG_LEAD_IDXS = Int64[2:3;7:12]
+
+
+forward_operator = frame_operator_lambda*frame_operator_X
 
 
 const Ψ_terminals= Rational{Int64}[I(8) zeros(8)] #terminals
-const null_space = Rational{Int64}[-ones(3);ones(6)] #null space
+
+
+
+
+
+const null_space = Rational{Int64}[-ones(3);zeros(6)] #null space
 
 
 const F = frame_operator_lambda * LinearMap(Rational{Int64}[ECGTools.frame_operator_X[ECG_LEAD_IDXS,:];inv(frame_operator_lambda) * null_space'])
