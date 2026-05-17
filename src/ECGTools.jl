@@ -22,7 +22,7 @@ const SamplingOperator = I(9)[[1;3:end],:]
 
 
 export select_leads
-select_leads(X::Matrix{T}) where {T} = size(X,1) == 12 ? X[ECG_LEAD_IDXS,:] : error("expected 12 leads received $(size(X,1))")
+select_leads(X::AbstractMatrix{T}) where {T} = size(X,1) == 12 ? X[ECG_LEAD_IDXS,:] : error("expected 12 leads received $(size(X,1))")
 
 
 const CovarianceExchangeOperator = SamplingOperator * ForwardOperatorPinv
